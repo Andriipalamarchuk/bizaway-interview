@@ -1,0 +1,32 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DATABASE_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MONGO_INITDB_DATABASE=${DATABASE_NAME}
+    volumes:
+      - mongodb_volume:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    ports:
+      - ${DATABASE_PORT}:27017
+  redis:
+    image: redis:8.0.1-alpine3.21
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${REDIS_PORT}:6379
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      # This command is needed to check that Redis server is started completely(not only container) and ready to accept connections
+      test: [ 'CMD', 'redis-cli', '--raw', 'incr', 'ping' ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+volumes:
+  mongodb_volume:

@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from './config/config-validation.schema';
 import { RedisModule } from './modules/cache/redis/redis.module';
 import { HashKey } from './enums/hash-key.enum';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -24,6 +25,12 @@ import { HashKey } from './enums/hash-key.enum';
         };
       },
     }),
+    MongooseModule.forRoot(
+      `mongodb://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`,
+      {
+        dbName: process.env.DATABASE_NAME,
+      },
+    ),
   ],
   controllers: [AppController],
   providers: [AppService],

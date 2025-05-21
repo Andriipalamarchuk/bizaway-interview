@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppResolver } from './app.resolver';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validationSchema } from './config/config-validation.schema';
 import { RedisModule } from './modules/cache/redis/redis.module';
 import { HashKey } from './enums/hash-key.enum';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -31,8 +32,17 @@ import { MongooseModule } from '@nestjs/mongoose';
         dbName: process.env.DATABASE_NAME,
       },
     ),
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      imports: [ConfigModule], // import the module that provides ConfigService
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        driver: ApolloDriver,
+        autoSchemaFile: true,
+        playground: configService.get('GRAPHQL_PLAYGROUND') === 'true',
+      }),
+    }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [AppResolver],
 })
 export class AppModule {}

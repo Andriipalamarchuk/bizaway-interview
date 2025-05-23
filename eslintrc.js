@@ -22,6 +22,16 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'object-curly-spacing': ['error', 'always'],
     'import/export': 'off',
-    '@typescript-eslint/require-await': 'warn'
+    '@typescript-eslint/require-await': 'warn',
   },
+  overrides: [
+    {
+      files: ['*.spec.ts'],
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+      },
+    },
+  ],
 };

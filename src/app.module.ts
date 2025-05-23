@@ -7,6 +7,7 @@ import { HashKey } from './enums/hash-key.enum';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { TripModule } from './modules/trip/trip.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
         playground: configService.get('GRAPHQL_PLAYGROUND') === 'true',
       }),
     }),
+    TripModule,
   ],
   providers: [AppResolver],
 })

@@ -12,4 +12,5 @@ export const validationSchema = Joi.object({
   REDIS_PASSWORD: Joi.string().required(),
   BIZAWAY_API_KEY: Joi.string().required(),
   BIZAWAY_GET_TRIPS_URL: Joi.string().required(),
+  JWT_TOKEN: Joi.string().required(),
 });

@@ -8,6 +8,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TripModule } from './modules/trip/trip.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/users/user.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { TripModule } from './modules/trip/trip.module';
       }),
     }),
     TripModule,
+    UserModule,
+    AuthModule,
   ],
   providers: [AppResolver],
 })

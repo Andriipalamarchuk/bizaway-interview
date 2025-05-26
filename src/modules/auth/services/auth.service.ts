@@ -34,7 +34,7 @@ export class AuthService {
     if (!userCredentials.isEnabled) {
       throw new ForbiddenException('User is disabled. Contact admin');
     }
-    const userId = userCredentials._id;
+    const userId = userCredentials.id;
 
     return new LoginResultModel(
       userId,

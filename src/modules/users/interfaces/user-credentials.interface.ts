@@ -1,5 +1,5 @@
 export interface IUserCredentials {
-  _id: string;
+  id: string;
   email: string;
   password: string;
   isEnabled: boolean;

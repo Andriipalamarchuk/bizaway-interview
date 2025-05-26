@@ -3,7 +3,7 @@ import { Field, HideField, ObjectType } from '@nestjs/graphql';
 @ObjectType()
 export class UserModel {
   @Field()
-  _id: string;
+  id?: string;
 
   @Field()
   email: string;
@@ -21,12 +21,14 @@ export class UserModel {
   isAdmin: boolean;
 
   constructor(
+    id: string,
     email: string,
     firstName: string,
     lastName: string,
     isEnabled: boolean,
     isAdmin: boolean,
   ) {
+    this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;

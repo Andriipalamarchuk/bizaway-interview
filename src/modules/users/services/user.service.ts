@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserInput } from '../../auth/inputs/create-user.input';
 import { UserRepository } from '../repositories/user.repository';
 import { UserModel } from '../models/user.model';
@@ -18,7 +23,7 @@ export class UserService {
     id?: string,
   ): Promise<UserModel> {
     const user = await this.findOne({ email, id });
-    if (user._id !== currentUserId && isAdmin) {
+    if (user.id !== currentUserId && isAdmin) {
       throw new ForbiddenException('Not Authorized');
     }
 
@@ -78,6 +83,10 @@ export class UserService {
     ttlSeconds: TimeInSecond.ONE_DAY,
   })
   private async findOne(findParams: { email?: string; id?: string }): Promise<UserModel> {
+    if (!findParams.email && !findParams.id) {
+      throw new BadRequestException('Invalid params. At least email or id should be provided');
+    }
+
     const user = await this._userRepository.findOne(findParams);
     if (!user) {
       throw new NotFoundException('User not found');

@@ -10,6 +10,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TripModule } from './modules/trip/trip.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
+import { UserTripModule } from './modules/user-trip/user-trip.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { UserModule } from './modules/users/user.module';
     TripModule,
     UserModule,
     AuthModule,
+    UserTripModule,
   ],
   providers: [AppResolver],
 })

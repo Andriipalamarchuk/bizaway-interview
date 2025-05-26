@@ -11,8 +11,15 @@ services:
     volumes:
       - mongodb_volume:/data/db
       - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - bizaway-net
     ports:
       - ${DATABASE_PORT}:27017
+    healthcheck:
+      test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   redis:
     image: redis:8.0.1-alpine3.21
     restart: always
@@ -22,6 +29,8 @@ services:
       - ${REDIS_PORT}:6379
     command: >
       --requirepass ${REDIS_PASSWORD}
+    networks:
+      - bizaway-net
     healthcheck:
       # This command is needed to check that Redis server is started completely(not only container) and ready to accept connections
       test: [ 'CMD', 'redis-cli', '--raw', 'incr', 'ping' ]
@@ -30,3 +39,6 @@ services:
       retries: 5
 volumes:
   mongodb_volume:
+networks:
+  bizaway-net:
+    driver: bridge

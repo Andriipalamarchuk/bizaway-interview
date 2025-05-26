@@ -27,7 +27,7 @@ describe('AuthService', () => {
 
     test('should return JWT and user info on valid credentials', async () => {
       const user = {
-        _id: 'user123',
+        id: 'user123',
         password: 'hashedPassword',
         isEnabled: true,
         isAdmin: false,
@@ -45,12 +45,12 @@ describe('AuthService', () => {
         loginInput.password,
         user.password,
       );
-      expect(jwtService.sign).toHaveBeenCalledWith({ userId: user._id, isAdmin: user.isAdmin });
+      expect(jwtService.sign).toHaveBeenCalledWith({ userId: user.id, isAdmin: user.isAdmin });
     });
 
     test('should throw UnauthorizedException on password mismatch', async () => {
       const user = {
-        _id: 'user123',
+        id: 'user123',
         password: 'hashedPassword',
         isEnabled: true,
         isAdmin: false,
@@ -65,7 +65,7 @@ describe('AuthService', () => {
 
     test('should throw ForbiddenException if user is disabled', async () => {
       const user = {
-        _id: 'user123',
+        id: 'user123',
         password: 'hashedPassword',
         isEnabled: false,
         isAdmin: false,

@@ -6,6 +6,7 @@ import { RouteEnum } from '../../../enums/route.enum';
 import { CurrentUserId } from '../../../decorators/current-user-id.decorator';
 import { IsAdmin } from '../../../decorators/is-admin.decorator';
 import { AdminGuard } from '../../auth/guards/admin.guard';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 
 @Resolver(RouteEnum.User)
 export class UserResolver {
@@ -18,6 +19,7 @@ export class UserResolver {
     return await this._userService.getAllUsers();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => UserModel)
   public async user(
     @CurrentUserId() currentUserId: string,

@@ -20,4 +20,20 @@ export class TripModel {
 
   @Field()
   displayName: string;
+
+  constructor(
+    origin: string,
+    destination: string,
+    cost: number,
+    duration: number,
+    type: TripType,
+    displayName: string,
+  ) {
+    this.origin = origin;
+    this.destination = destination;
+    this.cost = cost;
+    this.duration = duration;
+    this.type = type;
+    this.displayName = displayName;
+  }
 }

@@ -16,7 +16,7 @@ describe('UserResolver', () => {
     test('should return all users from service', async () => {
       const mockUsers: UserModel[] = [
         {
-          _id: '1',
+          id: '1',
           email: 'a@example.com',
           firstName: 'A',
           lastName: 'B',
@@ -46,7 +46,7 @@ describe('UserResolver', () => {
 
     test('should return user by email', async () => {
       const mockUser: UserModel = {
-        _id: '1',
+        id: '1',
         email: 'a@example.com',
         firstName: 'Test',
         lastName: 'User',
@@ -65,7 +65,7 @@ describe('UserResolver', () => {
 
     test('should return user by id', async () => {
       const mockUser: UserModel = {
-        _id: '1',
+        id: '1',
         email: 'b@example.com',
         firstName: 'Test',
         lastName: 'User',

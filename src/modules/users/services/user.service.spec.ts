@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { UserModel } from '../models/user.model';
 import { CreateUserInput } from 'src/modules/auth/inputs/create-user.input';
 
@@ -15,10 +15,10 @@ describe('UserService', () => {
 
   describe('getUser', () => {
     test('should return user if userId matches or is not admin', async () => {
-      const mockUser = { _id: '123', email: 'test@example.com' } as UserModel;
+      const mockUser = { id: '123', email: 'test@example.com' } as UserModel;
       (service as any).findOne = jest.fn(async () => mockUser);
 
-      const result = await service.getUser(mockUser._id, false, mockUser.email);
+      const result = await service.getUser(mockUser.id!, false, mockUser.email);
 
       expect(result).toEqual(mockUser);
       expect((service as any).findOne).toHaveBeenCalledWith({
@@ -28,7 +28,7 @@ describe('UserService', () => {
     });
 
     test('should throw ForbiddenException if userId mismatch and isAdmin is true', async () => {
-      const mockUser = { _id: '456', email: 'test@example.com' } as UserModel;
+      const mockUser = { id: '456', email: 'test@example.com' } as UserModel;
       (service as any).findOne = jest.fn(async () => mockUser);
 
       await expect(service.getUser('123', true, 'test@example.com')).rejects.toThrow(
@@ -50,7 +50,7 @@ describe('UserService', () => {
 
   describe('findOneById', () => {
     test('should return user by id', async () => {
-      const mockUser = { _id: '1' } as UserModel;
+      const mockUser = { id: '1' } as UserModel;
       (service as any).findOne = jest.fn(async () => mockUser);
 
       const result = await service.findOneById('1');
@@ -81,7 +81,7 @@ describe('UserService', () => {
         lastName: 'User',
       };
 
-      const newUser = { ...input, _id: 'abc123', isAdmin: false, isEnabled: true } as UserModel;
+      const newUser = { ...input, id: 'abc123', isAdmin: false, isEnabled: true } as UserModel;
       userRepository.create = jest.fn(async () => newUser);
 
       const result = await service.create(input);
@@ -97,7 +97,7 @@ describe('UserService', () => {
         email: 'a@example.com',
         password: 'hashed',
         isEnabled: true,
-        _id: 'id',
+        id: 'id',
       };
       userRepository.getUserCredentials = jest.fn(async () => credentials);
 
@@ -117,8 +117,14 @@ describe('UserService', () => {
   });
 
   describe('findOne (private)', () => {
+    test('should throw BadRequestException for missing parameters', async () => {
+      await expect((service as any).findOne({})).rejects.toThrow(
+        new BadRequestException('Invalid params. At least email or id should be provided'),
+      );
+    });
+
     test('should return user if found', async () => {
-      const mockUser = { _id: '1' } as UserModel;
+      const mockUser = { id: '1' } as UserModel;
       userRepository.findOne = jest.fn(async () => mockUser);
 
       const result = await (service as any).findOne({ id: '1' });

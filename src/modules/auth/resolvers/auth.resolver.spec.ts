@@ -24,7 +24,7 @@ describe('AuthResolver', () => {
 
     test('should call authService.register and return a UserModel', async () => {
       const userModel: UserModel = {
-        _id: '123',
+        id: '123',
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,

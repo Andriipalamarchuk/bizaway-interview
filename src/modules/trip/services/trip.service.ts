@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { SortByEnum, SortDirectionEnum } from '../enums/sort.enum';
 import { TripSearchModel } from '../models/trip-search.model';
 import { BizawayService } from './bizaway.service';
-import { Trip } from '../schemas/trip.schema';
+import { TripModel } from '../models/trip.model';
 
 @Injectable()
 export class TripService {
   constructor(private readonly _bizawayService: BizawayService) {}
 
+  //TODO: Asc Bizaway documentation in possible on their side to have pagination
   public async getPossibleTrips(
     origin: string,
     destination: string,
@@ -22,7 +23,11 @@ export class TripService {
     };
   }
 
-  private sortTrips(trips: Trip[], sortBy: SortByEnum, sortDirection: SortDirectionEnum): Trip[] {
+  private sortTrips(
+    trips: TripModel[],
+    sortBy: SortByEnum,
+    sortDirection: SortDirectionEnum,
+  ): TripModel[] {
     const sortField = sortBy === SortByEnum.Fastest ? 'duration' : 'cost';
 
     return trips.sort((a, b) => {

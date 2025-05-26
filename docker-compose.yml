@@ -1,0 +1,33 @@
+include:
+  - docker-compose.database.yml
+
+services:
+  bizaway-node:
+    image: bizaway-node:latest
+    build:
+      dockerfile: Dockerfile
+      context: .
+    develop:
+      watch:
+        - action: rebuild
+          path: package.json
+          ignore:
+            - node_modules/
+    env_file:
+      - .env
+    environment:
+      DATABASE_HOST: mongodb
+      REDIS_HOST: redis
+    networks:
+      - bizaway-net
+    ports:
+      - ${NODE_PORT}:${NODE_PORT}
+    depends_on:
+      mongodb:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+    restart: on-failure
+
